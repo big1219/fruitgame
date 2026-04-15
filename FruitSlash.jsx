@@ -303,16 +303,16 @@ function createFruit(canvasW, canvasH, difficulty, frameCount) {
   }
 
   // Speed scales with difficulty - slower and more hang time early on
-  const speedMult = Math.min(1, 0.7 + difficulty * 0.06);
+  const speedMult = Math.min(1, 0.55 + difficulty * 0.05);
 
   return {
     id: Date.now() + Math.random(),
     ...fruitData, isHazard, isSpecial,
     x: randomBetween(canvasW * 0.12, canvasW * 0.88),
     y: canvasH + 50,
-    vx: randomBetween(-3, 3) * speedMult,
-    vy: randomBetween(-canvasH * 0.020, -canvasH * 0.026),
-    gravity: canvasH * 0.00038 * speedMult,
+    vx: randomBetween(-2.5, 2.5) * speedMult,
+    vy: randomBetween(-canvasH * 0.021, -canvasH * 0.025),
+    gravity: canvasH * 0.00032 * speedMult,
     rotation: 0,
     rotationSpeed: randomBetween(-6, 6),
     sliced: false, opacity: 1,
@@ -624,12 +624,12 @@ export default function FruitSlash() {
       if (s.gameState !== GAME_STATES.PLAYING) { ctx.restore(); return; }
 
       if (s.frozen) { s.frozenTimer--; if (s.frozenTimer <= 0) { s.frozen = false; syncUI(); } }
-      s.difficulty = 1 + s.score * 0.01;
+      s.difficulty = 1 + s.score * 0.007;
 
       // Spawn - starts slow, ramps gradually
       if (!s.frozen) {
         s.spawnTimer++;
-        const interval = Math.max(30, 90 - s.difficulty * 4);
+        const interval = Math.max(38, 110 - s.difficulty * 4);
         if (s.spawnTimer >= interval) {
           s.spawnTimer = 0;
           // No multi-spawn until difficulty > 2.5
