@@ -281,15 +281,18 @@ class AudioEngine {
 }
 
 /* ─────────────────────── FRUIT FACTORY ─────────────────────── */
-function createFruit(canvasW, canvasH, difficulty) {
-  const hazardChance = Math.min(0.22, 0.08 + difficulty * 0.012);
-  const starChance = Math.max(0.01, 0.04 - difficulty * 0.003);
+function createFruit(canvasW, canvasH, difficulty, frameCount) {
+  // Grace period: no hazards for first ~6 seconds (360 frames)
+  const gracePeriod = frameCount < 360;
+  const hazardChance = gracePeriod ? 0 : Math.min(0.18, 0.05 + (difficulty - 1) * 0.008);
+  const starChance = Math.max(0.02, 0.06 - difficulty * 0.003);
   const roll = Math.random();
   let fruitData, isHazard = false, isSpecial = false;
 
   if (roll < hazardChance) {
     isHazard = true;
-    fruitData = difficulty < 3 && Math.random() < 0.6
+    // Only bombs early, full variety after difficulty 4
+    fruitData = difficulty < 4 && Math.random() < 0.7
       ? HAZARDS[0]
       : HAZARDS[Math.floor(Math.random() * HAZARDS.length)];
   } else if (roll < hazardChance + starChance) {
@@ -299,14 +302,17 @@ function createFruit(canvasW, canvasH, difficulty) {
     fruitData = FRUITS[Math.floor(Math.random() * FRUITS.length)];
   }
 
+  // Speed scales with difficulty - slower and more hang time early on
+  const speedMult = Math.min(1, 0.7 + difficulty * 0.06);
+
   return {
     id: Date.now() + Math.random(),
     ...fruitData, isHazard, isSpecial,
     x: randomBetween(canvasW * 0.12, canvasW * 0.88),
     y: canvasH + 50,
-    vx: randomBetween(-3.5, 3.5),
-    vy: randomBetween(-canvasH * 0.019, -canvasH * 0.027),
-    gravity: canvasH * 0.00042,
+    vx: randomBetween(-3, 3) * speedMult,
+    vy: randomBetween(-canvasH * 0.020, -canvasH * 0.026),
+    gravity: canvasH * 0.00038 * speedMult,
     rotation: 0,
     rotationSpeed: randomBetween(-6, 6),
     sliced: false, opacity: 1,
@@ -345,14 +351,14 @@ export default function FruitSlash() {
   const audioRef = useRef(null);
   const stateRef = useRef({
     gameState: GAME_STATES.MENU, score: 0, combo: 0, maxCombo: 0,
-    lives: 3, fruits: [], particles: [], halves: [], trail: [],
+    lives: 5, fruits: [], particles: [], halves: [], trail: [],
     comboTexts: [], warningTexts: [], spawnTimer: 0, difficulty: 1,
     frameCount: 0, isPointerDown: false, lastPointerPos: null,
     bestScore: 0, frozen: false, frozenTimer: 0,
     screenFlash: null, screenShake: { x: 0, y: 0, intensity: 0 },
   });
   const [uiState, setUiState] = useState({
-    gameState: GAME_STATES.MENU, score: 0, combo: 0, lives: 3,
+    gameState: GAME_STATES.MENU, score: 0, combo: 0, lives: 5,
     bestScore: 0, comboTier: COMBO_TIERS[0], frozen: false, muted: false,
   });
   const [rankings, setRankings] = useState([]);
@@ -401,7 +407,7 @@ export default function FruitSlash() {
 
     const s = stateRef.current;
     s.gameState = GAME_STATES.PLAYING;
-    s.score = 0; s.combo = 0; s.maxCombo = 0; s.lives = 3;
+    s.score = 0; s.combo = 0; s.maxCombo = 0; s.lives = 5;
     s.fruits = []; s.particles = []; s.halves = []; s.trail = [];
     s.comboTexts = []; s.warningTexts = []; s.spawnTimer = 0;
     s.difficulty = 1; s.frameCount = 0; s.frozen = false;
@@ -618,16 +624,19 @@ export default function FruitSlash() {
       if (s.gameState !== GAME_STATES.PLAYING) { ctx.restore(); return; }
 
       if (s.frozen) { s.frozenTimer--; if (s.frozenTimer <= 0) { s.frozen = false; syncUI(); } }
-      s.difficulty = 1 + s.score * 0.02;
+      s.difficulty = 1 + s.score * 0.01;
 
-      // Spawn
+      // Spawn - starts slow, ramps gradually
       if (!s.frozen) {
         s.spawnTimer++;
-        const interval = Math.max(22, 65 - s.difficulty * 3);
+        const interval = Math.max(30, 90 - s.difficulty * 4);
         if (s.spawnTimer >= interval) {
           s.spawnTimer = 0;
-          const count = Math.random() < 0.15 + s.difficulty * 0.01 ? Math.min(3, 1 + Math.floor(Math.random() * (1 + s.difficulty * 0.2))) : 1;
-          for (let i = 0; i < count; i++) s.fruits.push(createFruit(w, h, s.difficulty));
+          // No multi-spawn until difficulty > 2.5
+          const count = s.difficulty > 2.5 && Math.random() < 0.1 + (s.difficulty - 2.5) * 0.015
+            ? Math.min(3, 1 + Math.floor(Math.random() * Math.min(2, s.difficulty * 0.15)))
+            : 1;
+          for (let i = 0; i < count; i++) s.fruits.push(createFruit(w, h, s.difficulty, s.frameCount));
         }
       }
 
@@ -637,10 +646,10 @@ export default function FruitSlash() {
         else { f.x += f.vx; f.vy += f.gravity; f.y += f.vy; f.rotation += f.rotationSpeed; }
       }
 
-      // Missed
+      // Missed - lose max 1 life per frame even if multiple fruits fall
       const missed = s.fruits.filter((f) => !f.sliced && !f.isHazard && !f.isSpecial && f.y > h + 80 && f.vy > 0);
       if (missed.length > 0) {
-        s.lives -= missed.length;
+        s.lives -= 1;
         audioRef.current?.playMiss();
         if (s.lives <= 0) { s.lives = 0; endGame(); ctx.restore(); return; }
         syncUI();
@@ -775,7 +784,7 @@ export default function FruitSlash() {
       {uiState.gameState === GAME_STATES.PLAYING && (
         <div style={{ position: "absolute", top: 0, left: 0, right: 0, padding: "14px 18px", display: "flex", justifyContent: "space-between", alignItems: "flex-start", background: "linear-gradient(to bottom, rgba(0,0,0,0.55), transparent)", pointerEvents: "none", zIndex: 10 }}>
           <div style={{ display: "flex", gap: "3px" }}>
-            {Array.from({ length: 3 }, (_, i) => (
+            {Array.from({ length: 5 }, (_, i) => (
               <span key={i} style={{ fontSize: "22px", opacity: i < uiState.lives ? 1 : 0.15, filter: i < uiState.lives ? "none" : "grayscale(1)", transition: "all 0.3s" }}>❤️</span>
             ))}
           </div>
