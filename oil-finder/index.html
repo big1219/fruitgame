@@ -4,15 +4,15 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
   <meta name="theme-color" content="#0f172a" />
-  <title>내 차 엔진오일 찾기 🛢️</title>
+  <title>발보린 엔진오일 찾기 🛢️</title>
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
     :root {
       --bg: #0f172a;
       --card: #1e293b;
       --card2: #253349;
-      --accent: #f59e0b;
-      --accent2: #fbbf24;
+      --accent: #e4002b;
+      --accent2: #ff5a6a;
       --text: #f1f5f9;
       --muted: #94a3b8;
       --green: #34d399;
@@ -51,8 +51,8 @@
     }
     .plate-input::placeholder { color: #9ca3af; font-weight: 500; letter-spacing: 0; font-size: 1.1rem; }
     button.primary {
-      background: linear-gradient(135deg, var(--accent), #d97706);
-      color: #1c1200; font-weight: 700; font-size: 1rem;
+      background: linear-gradient(135deg, var(--accent), #a30020);
+      color: #fff; font-weight: 700; font-size: 1rem;
       border: none; border-radius: 10px; padding: 0 20px;
       cursor: pointer; transition: transform .1s;
       white-space: nowrap;
@@ -94,8 +94,8 @@
 
     .oil-hero {
       text-align: center; padding: 18px 12px;
-      background: linear-gradient(135deg, rgba(245,158,11,.15), rgba(245,158,11,.05));
-      border: 1px solid rgba(245,158,11,.35); border-radius: 14px; margin-bottom: 16px;
+      background: linear-gradient(135deg, rgba(228,0,43,.16), rgba(228,0,43,.05));
+      border: 1px solid rgba(228,0,43,.4); border-radius: 14px; margin-bottom: 16px;
     }
     .oil-hero .visc { font-size: 2.4rem; font-weight: 800; color: var(--accent2); letter-spacing: 1px; }
     .oil-hero .spec { color: var(--text); font-size: 0.95rem; margin-top: 6px; font-weight: 600; }
@@ -122,6 +122,34 @@
       border-radius: 999px; padding: 4px 12px; font-size: 0.82rem; font-weight: 600;
     }
 
+    .brand-mark {
+      display: inline-block; background: var(--accent); color: #fff;
+      font-weight: 800; font-style: italic; letter-spacing: 1px;
+      border-radius: 8px; padding: 4px 14px; font-size: 0.9rem; margin-bottom: 10px;
+    }
+
+    /* 발보린 제품 추천 카드 */
+    .products-title {
+      font-size: 0.9rem; font-weight: 700; color: var(--accent2);
+      margin-bottom: 10px; display: flex; align-items: center; gap: 6px;
+    }
+    .product-card {
+      display: flex; align-items: center; gap: 12px;
+      background: var(--card2); border: 1px solid #334155;
+      border-radius: 12px; padding: 12px 14px; margin-bottom: 8px;
+    }
+    .product-card.best { border-color: rgba(228,0,43,.6); background: linear-gradient(135deg, rgba(228,0,43,.12), var(--card2)); }
+    .product-card .bottle { font-size: 1.6rem; }
+    .product-card .p-name { font-weight: 700; font-size: 0.92rem; }
+    .product-card .p-why { color: var(--muted); font-size: 0.78rem; margin-top: 3px; line-height: 1.45; }
+    .product-card .p-tag {
+      margin-left: auto; flex-shrink: 0;
+      font-size: 0.68rem; font-weight: 700; border-radius: 999px; padding: 3px 9px;
+    }
+    .p-tag.best { background: var(--accent); color: #fff; }
+    .p-tag.alt { background: #334155; color: var(--muted); }
+    .products-wrap { margin-bottom: 14px; }
+
     .hidden { display: none; }
     footer { text-align: center; color: #475569; font-size: 0.72rem; line-height: 1.6; margin-top: 24px; }
   </style>
@@ -129,8 +157,9 @@
 <body>
   <div class="app">
     <header>
-      <h1>🛢️ 내 차 엔진오일 찾기</h1>
-      <p>차량번호를 입력하면 맞는 엔진오일을 알려드려요</p>
+      <div class="brand-mark">Valvoline™</div>
+      <h1>🛢️ 발보린 엔진오일 찾기</h1>
+      <p>차량번호를 입력하면 내 차에 맞는 발보린 오일을 추천해드려요</p>
     </header>
 
     <!-- 1. 차량번호 입력 -->
@@ -185,12 +214,18 @@
         <div class="detail"><div class="k">교환 주기</div><div class="v" id="oilInterval"></div></div>
       </div>
 
+      <div class="products-wrap">
+        <div class="products-title">🛢️ 발보린 추천 제품</div>
+        <div id="productList"></div>
+      </div>
+
       <div class="note" id="oilNote"></div>
     </section>
 
     <footer>
-      본 정보는 참고용입니다. 정확한 오일 규격·용량은 차량 취급설명서 또는<br/>
-      제조사 공식 서비스센터 기준을 따르세요.
+      본 앱은 발보린(Valvoline) 공식 서비스가 아닌 비공식 참고용 앱입니다.<br/>
+      제품 라인업·규격은 국가/판매 시기에 따라 다를 수 있으니 구매 전 제품 라벨의<br/>
+      점도·인증 규격과 차량 취급설명서를 반드시 확인하세요.
     </footer>
   </div>
 
@@ -339,6 +374,58 @@
     return DEMO_PLATE_DB[plateNo] ?? null;
   }
 
+  /* ==========================================================================
+   * 발보린(Valvoline) 제품 매칭
+   * 차량의 권장 점도/규격/연료 타입에 맞는 발보린 제품을 골라줍니다.
+   * 제품 라인업은 시장/시기에 따라 다를 수 있는 참고용 정보입니다.
+   * ========================================================================== */
+  function recommendValvoline(engineKey, oil) {
+    const isDiesel = engineKey.includes("디젤");
+    const isHybrid = engineKey.includes("하이브리드");
+    const isTurbo = engineKey.includes("터보");
+    const needsLowSaps = /ACEA C/.test(oil.spec);   // DPF/GPF 보호용 Low/Mid SAPS
+    const isDexos = /dexos/i.test(oil.spec);
+    const visc = oil.visc;
+    const list = [];
+
+    if (isHybrid) {
+      list.push({ name: `발보린 하이브리드 풀 신세틱 ${visc}`, tag: "best",
+        why: "하이브리드 엔진 전용 저점도 합성유. 잦은 시동 온·오프 환경에 최적화." });
+      list.push({ name: `발보린 어드밴스드 풀 신세틱 ${visc}`, tag: "alt",
+        why: "API SP · ILSAC GF-6 인증 100% 합성유. 하이브리드에도 사용 가능." });
+    } else if (isDiesel || needsLowSaps) {
+      if (visc === "0W-20") {
+        list.push({ name: "발보린 신파워 ENV C5 0W-20", tag: "best",
+          why: "ACEA C5 Low SAPS 규격. DPF/GPF 장착 차량용 저점도 합성유." });
+        list.push({ name: "발보린 신파워 MST C5 0W-30", tag: "alt",
+          why: "ACEA C5 규격 대체 점도. 가혹조건·고속주행이 많다면 선택." });
+      } else {
+        list.push({ name: "발보린 신파워 MST C5 0W-30", tag: "best",
+          why: "ACEA C5 Low SAPS 규격 100% 합성유. DPF 보호에 적합." });
+        list.push({ name: "발보린 신파워 XL-III C3 5W-30", tag: "alt",
+          why: "ACEA C3 규격. 주행거리가 많은 차량의 대체 점도로 적합." });
+      }
+    } else if (isDexos) {
+      list.push({ name: `발보린 어드밴스드 풀 신세틱 ${visc}`, tag: "best",
+        why: "dexos1 인증 100% 합성유. GM(쉐보레) 차량 권장 규격 충족." });
+      list.push({ name: `발보린 맥스라이프 합성유 ${visc}`, tag: "alt",
+        why: "주행거리 10만km 이상 차량용. 실(seal) 컨디셔너로 오일 누유 예방." });
+    } else if (isTurbo && visc === "0W-30") {
+      list.push({ name: "발보린 신파워 MST C5 0W-30", tag: "best",
+        why: "고온·고부하 터보 엔진을 위한 100% 합성유. API SP 충족." });
+      list.push({ name: "발보린 어드밴스드 풀 신세틱 5W-30", tag: "alt",
+        why: "제조사 대체 점도(5W-30) 사용 시. API SP · ILSAC GF-6 인증." });
+    } else {
+      list.push({ name: `발보린 어드밴스드 풀 신세틱 ${visc}`, tag: "best",
+        why: "API SP · ILSAC GF-6 인증 100% 합성유. 마모·슬러지 보호 강화." });
+      list.push({ name: `발보린 리스토어 & 프로텍트 ${visc}`, tag: "alt",
+        why: "누적된 카본 침전물 세정 + 신차 수준 보호. 연식 있는 차량에 추천." });
+      list.push({ name: `발보린 맥스라이프 합성유 ${visc}`, tag: "alt",
+        why: "주행거리 10만km 이상 고주행 차량용. 누유 예방 성분 포함." });
+    }
+    return list;
+  }
+
   /* ========================= 번호판 검증/정규화 ========================= */
   // 12가3456, 123가4567, 서울12가3456 형식 허용
   const PLATE_RE = /^(?:[가-힣]{2})?\d{2,3}[가-힣]\d{4}$/;
@@ -418,6 +505,7 @@
       return;
     }
 
+    hideResult();
     searchBtn.disabled = true;
     searchBtn.textContent = "조회중…";
     try {
@@ -457,6 +545,24 @@
     $("oilCap").textContent = oil.cap;
     $("oilInterval").textContent = oil.interval;
     $("oilNote").innerHTML = "💡 " + oil.note;
+
+    const productList = $("productList");
+    productList.innerHTML = "";
+    for (const p of recommendValvoline(engineKey, oil)) {
+      const card = document.createElement("div");
+      card.className = "product-card" + (p.tag === "best" ? " best" : "");
+      const tagText = p.tag === "best" ? "베스트 매치" : "대체 추천";
+      card.innerHTML =
+        `<div class="bottle">🛢️</div>
+         <div>
+           <div class="p-name"></div>
+           <div class="p-why"></div>
+         </div>
+         <span class="p-tag ${p.tag}">${tagText}</span>`;
+      card.querySelector(".p-name").textContent = p.name;
+      card.querySelector(".p-why").textContent = p.why;
+      productList.appendChild(card);
+    }
 
     const altWrap = $("altViscWrap");
     const alt = $("altVisc");
