@@ -1,9 +1,9 @@
 import React from 'react'
 import ReactDOM from 'react-dom/client'
-import FruitSlash from './FruitSlash'
+import ValvolineMall from './ValvolineMall'
 
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
-    <FruitSlash />
+    <ValvolineMall />
   </React.StrictMode>
 )
