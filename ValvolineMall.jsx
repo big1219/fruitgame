@@ -18,30 +18,46 @@ const BRAND = {
 
 const CATEGORIES = [
   { id: 'all', name: '전체상품' },
-  { id: 'gasoline', name: '가솔린 엔진오일' },
-  { id: 'diesel', name: '디젤/상용 엔진오일' },
-  { id: 'transmission', name: '미션오일' },
+  { id: 'passenger', name: '승용 엔진오일' },
+  { id: 'commercial', name: '상용/디젤 엔진오일' },
+  { id: 'transmission', name: '미션/기어오일' },
   { id: 'coolant', name: '부동액/냉각수' },
-  { id: 'chemical', name: '케미컬/첨가제' },
+  { id: 'moto', name: '이륜차 오일' },
+  { id: 'industrial', name: '농기계/산업유' },
+  { id: 'carcare', name: '케미컬/카케어' },
 ]
 
+// 실제 취급 품목 기준 카탈로그 (판매물량 상위 제품)
+// ※ 가격은 데모용 임시값 — 실제 공급가 확정 후 교체 필요
 const PRODUCTS = [
-  { id: 1, cat: 'gasoline', badge: 'BEST', name: '발보린 신파워 5W-30 합성 엔진오일', spec: '1L × 12개 (1박스)', consumer: 156000, biz: 98000, tag: 'API SP / GF-6', emoji: '🛢️' },
-  { id: 2, cat: 'gasoline', badge: 'BEST', name: '발보린 신파워 0W-20 하이브리드 전용', spec: '1L × 12개 (1박스)', consumer: 168000, biz: 109000, tag: '하이브리드/GDI 최적화', emoji: '🛢️' },
-  { id: 3, cat: 'gasoline', badge: '특가', name: '발보린 어드밴스드 풀신세틱 5W-40', spec: '4L × 4개 (1박스)', consumer: 192000, biz: 115000, tag: '100% 합성유', emoji: '🛢️' },
-  { id: 4, cat: 'gasoline', badge: null, name: '발보린 VR1 레이싱 5W-50', spec: '1L × 12개 (1박스)', consumer: 216000, biz: 149000, tag: '고성능/서킷', emoji: '🏁' },
-  { id: 5, cat: 'gasoline', badge: null, name: '발보린 맥스라이프 5W-30 (주행거리 8만km↑)', spec: '1L × 12개 (1박스)', consumer: 144000, biz: 89000, tag: '실링 컨디셔너 함유', emoji: '🛢️' },
-  { id: 6, cat: 'diesel', badge: 'BEST', name: '발보린 프리미엄 블루 15W-40 상용디젤', spec: '20L 말통', consumer: 138000, biz: 86000, tag: 'CK-4 / 대형트럭·버스', emoji: '🚛' },
-  { id: 7, cat: 'diesel', badge: null, name: '발보린 올플릿 10W-40 디젤 엔진오일', spec: '6L × 3개 (1박스)', consumer: 126000, biz: 79000, tag: 'DPF 안전', emoji: '🚛' },
-  { id: 8, cat: 'diesel', badge: '특가', name: '발보린 프리미엄 블루 15W-40 드럼', spec: '200L 드럼', consumer: 1290000, biz: 790000, tag: '드럼 단위 최저가', emoji: '🛢️' },
-  { id: 9, cat: 'transmission', badge: 'BEST', name: '발보린 맥스라이프 멀티비히클 ATF', spec: '1L × 12개 (1박스)', consumer: 132000, biz: 84000, tag: '자동변속기 범용', emoji: '⚙️' },
-  { id: 10, cat: 'transmission', badge: null, name: '발보린 기어오일 75W-90 GL-5', spec: '1L × 12개 (1박스)', consumer: 148000, biz: 96000, tag: '수동/디퍼렌셜', emoji: '⚙️' },
-  { id: 11, cat: 'coolant', badge: null, name: '발보린 지렉스(ZEREX) 부동액 G05', spec: '4L × 4개 (1박스)', consumer: 96000, biz: 58000, tag: '장수명 냉각수', emoji: '🧊' },
-  { id: 12, cat: 'coolant', badge: '특가', name: '지렉스 아시안 비히클 사계절 냉각수', spec: '4L × 4개 (1박스)', consumer: 104000, biz: 62000, tag: '국산차/일본차 전용', emoji: '🧊' },
-  { id: 13, cat: 'chemical', badge: null, name: '발보린 연료 시스템 클리너', spec: '350ml × 24개 (1박스)', consumer: 168000, biz: 99000, tag: '인젝터 세정', emoji: '🧪' },
-  { id: 14, cat: 'chemical', badge: null, name: '발보린 엔진 플러시', spec: '500ml × 12개 (1박스)', consumer: 108000, biz: 66000, tag: '오일교환 전 세정', emoji: '🧪' },
-  { id: 15, cat: 'chemical', badge: 'BEST', name: '발보린 브레이크 & 파츠 클리너', spec: '500ml × 24개 (1박스)', consumer: 120000, biz: 69000, tag: '정비 필수품', emoji: '🧪' },
-  { id: 16, cat: 'chemical', badge: null, name: '발보린 멀티퍼포스 그리스', spec: '400g × 20개 (1박스)', consumer: 140000, biz: 88000, tag: '리튬계 범용', emoji: '🧪' },
+  { id: 1, cat: 'passenger', badge: 'BEST', name: '발보린 T-CX5, 5W30', spec: '1L × 12개 (1박스)', consumer: 156000, biz: 98000, tag: '승용 합성 엔진오일', emoji: '🛢️' },
+  { id: 2, cat: 'passenger', badge: 'BEST', name: '발보린 T-GX5, 5W30', spec: '1L × 12개 (1박스)', consumer: 144000, biz: 89000, tag: '승용 가솔린', emoji: '🛢️' },
+  { id: 3, cat: 'passenger', badge: null, name: '발보린 T-CX7, 5W30', spec: '1L × 12개 (1박스)', consumer: 168000, biz: 106000, tag: '프리미엄 합성유', emoji: '🛢️' },
+  { id: 4, cat: 'passenger', badge: null, name: '발보린 T-GX7 Hybrid, 0W20', spec: '1L × 12개 (1박스)', consumer: 172000, biz: 112000, tag: '하이브리드 전용', emoji: '🛢️' },
+  { id: 5, cat: 'passenger', badge: null, name: '발보린 T-CX7 Zero, 0W30', spec: '1L × 12개 (1박스)', consumer: 176000, biz: 115000, tag: '저점도 고연비', emoji: '🛢️' },
+  { id: 6, cat: 'passenger', badge: null, name: '발보린 T-FX, 0W30', spec: '1L × 12개 (1박스)', consumer: 178000, biz: 118000, tag: '고성능 저점도', emoji: '🛢️' },
+  { id: 7, cat: 'passenger', badge: 'BEST', name: 'DURAMAX SUPER LDX7, 5W30', spec: '200L 드럼', consumer: 1180000, biz: 720000, tag: '판매 1위 · 드럼', emoji: '🛢️' },
+  { id: 8, cat: 'passenger', badge: null, name: 'DURAMAX PRO PX7, 5W30', spec: '4L × 4개 (1박스)', consumer: 148000, biz: 92000, tag: '승용 합성유', emoji: '🛢️' },
+  { id: 9, cat: 'commercial', badge: 'BEST', name: '발보린 Euro Trans, 10W40', spec: '20L 말통', consumer: 128000, biz: 82000, tag: '상용 디젤 · 판매 상위', emoji: '🚛' },
+  { id: 10, cat: 'commercial', badge: null, name: '발보린 HD Euro VI, 10W40', spec: '20L 말통', consumer: 136000, biz: 88000, tag: '유로6 대형차', emoji: '🚛' },
+  { id: 11, cat: 'commercial', badge: null, name: '발보린 P-Blue 7800, 15W40', spec: '20L 말통', consumer: 118000, biz: 76000, tag: '프리미엄 블루 상용디젤', emoji: '🚛' },
+  { id: 12, cat: 'commercial', badge: null, name: 'DURAMAX TOP TRUCK EURO, 10W40', spec: '200L 드럼', consumer: 1120000, biz: 690000, tag: '대형트럭 · 드럼', emoji: '🚛' },
+  { id: 13, cat: 'commercial', badge: '특가', name: '발보린 T-Diesel Xtreme, 10W40', spec: '20L 말통', consumer: 124000, biz: 74000, tag: '디젤 전용', emoji: '🚛' },
+  { id: 14, cat: 'transmission', badge: 'BEST', name: '발보린 ATF MULTI HK', spec: '1L × 12개 (1박스)', consumer: 132000, biz: 84000, tag: '국산차 자동변속기 범용', emoji: '⚙️' },
+  { id: 15, cat: 'transmission', badge: null, name: '발보린 ATF MLV Plus', spec: '1L × 12개 (1박스)', consumer: 138000, biz: 88000, tag: '멀티비히클 ATF', emoji: '⚙️' },
+  { id: 16, cat: 'transmission', badge: null, name: 'DURAMAX ATF MULTI-GARD', spec: '200L 드럼', consumer: 1090000, biz: 660000, tag: 'ATF · 드럼', emoji: '⚙️' },
+  { id: 17, cat: 'transmission', badge: null, name: '발보린 CVT Plus', spec: '1L × 12개 (1박스)', consumer: 142000, biz: 92000, tag: 'CVT 전용', emoji: '⚙️' },
+  { id: 18, cat: 'transmission', badge: null, name: '발보린 T-Gear 5, 80W90 GL-5', spec: '1L × 12개 (1박스)', consumer: 126000, biz: 79000, tag: '기어/디퍼렌셜', emoji: '⚙️' },
+  { id: 19, cat: 'coolant', badge: null, name: '발보린 Antifreeze Coolant(P)', spec: '20L 말통', consumer: 78000, biz: 46000, tag: '사계절 부동액', emoji: '🧊' },
+  { id: 20, cat: 'moto', badge: 'BEST', name: 'Duramoto 4T 7, 10W40', spec: '1L × 12개 (1박스)', consumer: 118000, biz: 72000, tag: '이륜차 4행정', emoji: '🏍️' },
+  { id: 21, cat: 'moto', badge: null, name: 'Duramoto 4T 5, 10W40', spec: '1L × 12개 (1박스)', consumer: 108000, biz: 64000, tag: '이륜차 4행정', emoji: '🏍️' },
+  { id: 22, cat: 'moto', badge: null, name: 'Duramoto Scooter, 5W40', spec: '1L × 12개 (1박스)', consumer: 112000, biz: 68000, tag: '스쿠터 전용', emoji: '🛵' },
+  { id: 23, cat: 'industrial', badge: null, name: 'Farmplus Eco, ISO 55 GL-4', spec: '20L 말통', consumer: 96000, biz: 58000, tag: '농기계 미션오일', emoji: '🚜' },
+  { id: 24, cat: 'industrial', badge: null, name: '발보린 T-Hydraulic, AW ISO 46', spec: '20L 말통', consumer: 88000, biz: 52000, tag: '유압 작동유', emoji: '🏗️' },
+  { id: 25, cat: 'carcare', badge: null, name: '발보린 Engine Flush', spec: '500ml × 12개 (1박스)', consumer: 108000, biz: 66000, tag: '오일교환 전 세정', emoji: '🧪' },
+  { id: 26, cat: 'carcare', badge: null, name: 'MAX GREASE EP VR #2', spec: '400g × 20개 (1박스)', consumer: 140000, biz: 88000, tag: '극압 그리스', emoji: '🧪' },
+  { id: 27, cat: 'carcare', badge: '특가', name: 'E1-Nano Wax Spray', spec: '500ml × 12개 (1박스)', consumer: 132000, biz: 79000, tag: '카케어 · 세차용품', emoji: '✨' },
+  { id: 28, cat: 'carcare', badge: null, name: 'E1-One Step Leather', spec: '500ml × 12개 (1박스)', consumer: 126000, biz: 76000, tag: '가죽 클리너', emoji: '✨' },
 ]
 
 const HERO_SLIDES = [
@@ -49,14 +65,14 @@ const HERO_SLIDES = [
     bg: `linear-gradient(120deg, ${BRAND.navy} 0%, ${BRAND.navyLight} 55%, ${BRAND.red} 130%)`,
     kicker: '발보린 사업자 전용몰 OPEN',
     title: '정비소·카센터·세차장 사장님,\n오픈 기념 전 품목 최대 40% 할인',
-    desc: '사업자 회원 가입 시 첫 주문 배송비 무료 + 신파워 1L 샘플 증정',
+    desc: '사업자 회원 가입 시 첫 주문 배송비 무료 + T-CX5 1L 샘플 증정',
     cta: '오픈 혜택 받기',
   },
   {
     bg: `linear-gradient(120deg, ${BRAND.red} 0%, ${BRAND.redDark} 60%, ${BRAND.navy} 140%)`,
     kicker: '드럼/말통 대량구매관',
     title: '많이 쓰는 오일,\n드럼 단위로 더 저렴하게',
-    desc: '프리미엄 블루 200L 드럼 등 대용량 상품 견적 상담 지원',
+    desc: 'DURAMAX SUPER LDX7 200L 드럼 등 대용량 상품 견적 상담 지원',
     cta: '대량구매 견적 문의',
   },
   {
@@ -164,7 +180,7 @@ export default function ValvolineMall() {
             <input
               value={query}
               onChange={(e) => setQuery(e.target.value)}
-              placeholder="상품명, 규격 검색 (예: 5W-30, ATF, 드럼)"
+              placeholder="상품명, 규격 검색 (예: T-CX5, 5W30, ATF, 드럼)"
               style={{ flex: 1, border: 'none', outline: 'none', padding: '10px 16px', fontSize: 14 }}
             />
             <button aria-label="검색" style={{ border: 'none', background: BRAND.red, color: '#fff', padding: '0 18px', fontSize: 16 }}>🔍</button>
