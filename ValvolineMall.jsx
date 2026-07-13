@@ -38,10 +38,15 @@ const PRODUCTS = [
   { id: 6, cat: 'passenger', badge: null, name: '발보린 T-FX, 0W30', spec: '1L × 12개 (1박스)', consumer: 178000, biz: 118000, tag: '고성능 저점도', emoji: '🛢️' },
   { id: 7, cat: 'passenger', badge: 'BEST', name: 'DURAMAX SUPER LDX7, 5W30', spec: '200L 드럼', consumer: 1180000, biz: 720000, tag: '판매 1위 · 드럼', emoji: '🛢️' },
   { id: 8, cat: 'passenger', badge: null, name: 'DURAMAX PRO PX7, 5W30', spec: '4L × 4개 (1박스)', consumer: 148000, biz: 92000, tag: '승용 합성유', emoji: '🛢️' },
+  { id: 29, cat: 'passenger', badge: 'NEW', name: 'DURAMAX Turbo Coat, 5W40', spec: '1L × 12개 (1박스)', consumer: 168000, biz: 105000, tag: '엔진오일+코팅 · PAO', emoji: '🛢️', img: '/products/duramax-turbo-coat-5w40.webp' },
+  { id: 30, cat: 'passenger', badge: null, name: 'DURAMAX, 5W30', spec: '1L × 12개 (1박스)', consumer: 152000, biz: 94000, tag: 'PAO · DPF/EURO-6', emoji: '🛢️', img: '/products/duramax-5w30.webp' },
+  { id: 31, cat: 'passenger', badge: null, name: 'DURAMAX, 5W40', spec: '1L × 12개 (1박스)', consumer: 156000, biz: 97000, tag: 'PAO · 마모 보호', emoji: '🛢️', img: '/products/duramax-5w40.webp' },
+  { id: 32, cat: 'passenger', badge: null, name: 'DURAMAX, 0W30', spec: '1L × 12개 (1박스)', consumer: 164000, biz: 102000, tag: 'PAO · 저점도', emoji: '🛢️', img: '/products/duramax-0w30.webp' },
   { id: 9, cat: 'commercial', badge: 'BEST', name: '발보린 Euro Trans, 10W40', spec: '20L 말통', consumer: 128000, biz: 82000, tag: '상용 디젤 · 판매 상위', emoji: '🚛' },
   { id: 10, cat: 'commercial', badge: null, name: '발보린 HD Euro VI, 10W40', spec: '20L 말통', consumer: 136000, biz: 88000, tag: '유로6 대형차', emoji: '🚛' },
   { id: 11, cat: 'commercial', badge: null, name: '발보린 P-Blue 7800, 15W40', spec: '20L 말통', consumer: 118000, biz: 76000, tag: '프리미엄 블루 상용디젤', emoji: '🚛' },
   { id: 12, cat: 'commercial', badge: null, name: 'DURAMAX TOP TRUCK EURO, 10W40', spec: '200L 드럼', consumer: 1120000, biz: 690000, tag: '대형트럭 · 드럼', emoji: '🚛' },
+  { id: 33, cat: 'commercial', badge: 'NEW', name: 'DURAMAX Top Truck Nova, 10W40', spec: '20L 말통', consumer: 142000, biz: 89000, tag: 'ACEA E6 / CK-4 · 유로6', emoji: '🚛', img: '/products/duramax-top-truck-nova-10w40.webp' },
   { id: 13, cat: 'commercial', badge: '특가', name: '발보린 T-Diesel Xtreme, 10W40', spec: '20L 말통', consumer: 124000, biz: 74000, tag: '디젤 전용', emoji: '🚛' },
   { id: 14, cat: 'transmission', badge: 'BEST', name: '발보린 ATF MULTI HK', spec: '1L × 12개 (1박스)', consumer: 132000, biz: 84000, tag: '국산차 자동변속기 범용', emoji: '⚙️' },
   { id: 15, cat: 'transmission', badge: null, name: '발보린 ATF MLV Plus', spec: '1L × 12개 (1박스)', consumer: 138000, biz: 88000, tag: '멀티비히클 ATF', emoji: '⚙️' },
@@ -296,8 +301,8 @@ export default function ValvolineMall() {
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(250px, 1fr))', gap: 18 }}>
           {filtered.map((p) => (
             <div key={p.id} className="card" style={{ background: '#fff', border: `1px solid ${BRAND.line}`, borderRadius: 14, overflow: 'hidden', display: 'flex', flexDirection: 'column' }}>
-              <div style={{ position: 'relative', background: `linear-gradient(135deg, #eef1f5, #e2e7ee)`, height: 150, display: 'grid', placeItems: 'center', fontSize: 56 }}>
-                {p.emoji}
+              <div style={{ position: 'relative', background: p.img ? '#fff' : `linear-gradient(135deg, #eef1f5, #e2e7ee)`, height: 150, display: 'grid', placeItems: 'center', fontSize: 56 }}>
+                {p.img ? <img src={p.img} alt={p.name} style={{ maxWidth: '100%', maxHeight: 140, objectFit: 'contain' }} /> : p.emoji}
                 {p.badge && (
                   <span style={{ position: 'absolute', top: 10, left: 10, background: p.badge === 'BEST' ? BRAND.navy : BRAND.red, color: '#fff', fontSize: 11, fontWeight: 800, borderRadius: 6, padding: '4px 8px' }}>{p.badge}</span>
                 )}
@@ -366,7 +371,9 @@ export default function ValvolineMall() {
               {cartItems.length === 0 && <div style={{ textAlign: 'center', color: BRAND.sub, padding: '60px 0' }}>담긴 상품이 없습니다.</div>}
               {cartItems.map((i) => (
                 <div key={i.id} style={{ display: 'flex', gap: 12, padding: '12px 0', borderBottom: `1px solid ${BRAND.line}` }}>
-                  <div style={{ width: 52, height: 52, borderRadius: 10, background: '#eef1f5', display: 'grid', placeItems: 'center', fontSize: 26, flexShrink: 0 }}>{i.emoji}</div>
+                  <div style={{ width: 52, height: 52, borderRadius: 10, background: i.img ? '#fff' : '#eef1f5', border: `1px solid ${BRAND.line}`, display: 'grid', placeItems: 'center', fontSize: 26, flexShrink: 0, overflow: 'hidden' }}>
+                    {i.img ? <img src={i.img} alt={i.name} style={{ maxWidth: '100%', maxHeight: 48, objectFit: 'contain' }} /> : i.emoji}
+                  </div>
                   <div style={{ flex: 1, minWidth: 0 }}>
                     <div style={{ fontSize: 13.5, fontWeight: 700, lineHeight: 1.35 }}>{i.name}</div>
                     <div style={{ fontSize: 12, color: BRAND.sub, marginTop: 2 }}>{i.spec}</div>
