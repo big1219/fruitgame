@@ -31,10 +31,13 @@ const CATEGORIES = [
 // ※ 가격은 데모용 임시값 — 실제 공급가 확정 후 교체 필요
 const PRODUCTS = [
   { id: 1, cat: 'passenger', badge: 'BEST', name: '발보린 Turbo CX5, 5W30', spec: '6L × 3개 (1박스)', consumer: 156000, biz: 98000, tag: 'ACEA C2/C3 · 연비개선형', emoji: '🛢️', img: '/products/turbo-cx5-5w30-6l.webp' },
-  { id: 2, cat: 'passenger', badge: 'BEST', name: '발보린 T-GX5, 5W30', spec: '1L × 12개 (1박스)', consumer: 144000, biz: 89000, tag: '승용 가솔린', emoji: '🛢️' },
+  { id: 2, cat: 'passenger', badge: 'BEST', name: '발보린 Turbo GX5, 5W30', spec: '4L × 4개 (1박스)', consumer: 144000, biz: 89000, tag: 'API SQ / ILSAC GF-7 · GDI', emoji: '🛢️', img: '/products/turbo-gx5-5w30-4l.webp' },
   { id: 3, cat: 'passenger', badge: null, name: '발보린 Turbo CX7, 5W30', spec: '1L × 12개 (1박스)', consumer: 168000, biz: 106000, tag: 'ACEA C2/C3 · 100% 합성유', emoji: '🛢️', img: '/products/turbo-cx7-5w30-1l.webp' },
   { id: 34, cat: 'passenger', badge: null, name: '발보린 Turbo CX7, 5W30', spec: '6L × 3개 (1박스)', consumer: 186000, biz: 118000, tag: 'ACEA C2/C3, API SQ · 6L', emoji: '🛢️', img: '/products/turbo-cx7-5w30-6l.webp' },
-  { id: 4, cat: 'passenger', badge: null, name: '발보린 T-GX7 Hybrid, 0W20', spec: '1L × 12개 (1박스)', consumer: 172000, biz: 112000, tag: '하이브리드 전용', emoji: '🛢️' },
+  { id: 4, cat: 'passenger', badge: null, name: '발보린 Turbo GX7 Hybrid, 0W20', spec: '4L × 4개 (1박스)', consumer: 172000, biz: 112000, tag: 'API SQ / GF-7 · 하이브리드 전용', emoji: '🛢️', img: '/products/turbo-gx7-hybrid-0w20-4l.webp' },
+  { id: 40, cat: 'passenger', badge: null, name: '발보린 Turbo GX7 Premier, 5W30', spec: '1L × 12개 (1박스)', consumer: 174000, biz: 113000, tag: 'API SQ / ILSAC GF-7 · 프리미엄', emoji: '🛢️', img: '/products/turbo-gx7-premier-5w30-1l.webp' },
+  { id: 41, cat: 'passenger', badge: null, name: '발보린 Turbo GX7, 5W20', spec: '4L × 4개 (1박스)', consumer: 168000, biz: 108000, tag: 'API SQ / GF-7 · GDI/T-GDI 저마찰', emoji: '🛢️', img: '/products/turbo-gx7-5w20-4l.webp' },
+  { id: 42, cat: 'passenger', badge: null, name: '발보린 Turbo RX5, 10W30', spec: '6L × 3개 (1박스)', consumer: 138000, biz: 86000, tag: '점도 안정성 · 엔진 청정성', emoji: '🛢️', img: '/products/turbo-rx5-10w30-6l.webp' },
   { id: 5, cat: 'passenger', badge: null, name: '발보린 Turbo CX7 Zero, 0W30', spec: '1L × 12개 (1박스)', consumer: 176000, biz: 115000, tag: 'ACEA C2, API SP · 저점도', emoji: '🛢️', img: '/products/turbo-cx7-zero-0w30-1l.webp' },
   { id: 35, cat: 'passenger', badge: null, name: '발보린 Turbo CX7 Zero, 0W30', spec: '6L × 3개 (1박스)', consumer: 194000, biz: 124000, tag: 'ACEA C2, API SP · 6L', emoji: '🛢️', img: '/products/turbo-cx7-zero-0w30-6l.webp' },
   { id: 6, cat: 'passenger', badge: null, name: '발보린 Turbo FX, 0W30', spec: '1L × 12개 (1박스)', consumer: 178000, biz: 118000, tag: 'ACEA C2 · 100% 합성유', emoji: '🛢️', img: '/products/turbo-fx-0w30-1l.webp' },
