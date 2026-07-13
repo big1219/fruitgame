@@ -149,6 +149,10 @@
     .p-tag.best { background: var(--accent); color: #fff; }
     .p-tag.alt { background: #334155; color: var(--muted); }
     .products-wrap { margin-bottom: 14px; }
+    .p-name a { color: inherit; text-decoration: none; border-bottom: 1px dotted var(--muted); }
+    .p-name a:hover { color: var(--accent2); border-color: var(--accent2); }
+    .products-source { font-size: 0.7rem; color: #64748b; margin-top: 6px; }
+    .products-source a { color: #64748b; }
 
     .hidden { display: none; }
     footer { text-align: center; color: #475569; font-size: 0.72rem; line-height: 1.6; margin-top: 24px; }
@@ -217,6 +221,7 @@
       <div class="products-wrap">
         <div class="products-title">🛢️ 발보린 추천 제품</div>
         <div id="productList"></div>
+        <div class="products-source">제품 라인업 출처: <a href="https://valvoline.co.kr" target="_blank" rel="noopener">한국발보린 공식 사이트</a></div>
       </div>
 
       <div class="note" id="oilNote"></div>
@@ -375,53 +380,52 @@
   }
 
   /* ==========================================================================
-   * 발보린(Valvoline) 제품 매칭
-   * 차량의 권장 점도/규격/연료 타입에 맞는 발보린 제품을 골라줍니다.
-   * 제품 라인업은 시장/시기에 따라 다를 수 있는 참고용 정보입니다.
+   * 발보린(Valvoline) 제품 매칭 — 한국발보린(valvoline.co.kr) 국내 판매 라인업 기준
+   *   TURBO GX7 하이브리드 0W-20 (API SP) / TURBO GX7 5W-30 · 10W-40 (API SP, 가솔린/LPG)
+   *   LDX7 5W-30 (디젤 DPF·가솔린·LPG 겸용) / DURAMAX 5W-30 (ACEA C2, DPF 승용디젤)
+   *   TURBO CNG MAXLIFE 10W-40 (LPG/CNG)
    * ========================================================================== */
+  const KR_SITE = "https://valvoline.co.kr/?page_id=132"; // 윤활유 제품 목록
+  const KR_PRODUCTS = {
+    gx7_0w20:  { name: "발보린 TURBO GX7 하이브리드 0W-20", url: KR_SITE,
+                 base: "API SP 100% 합성유. 하이브리드·저점도(0W-20) 지정 가솔린 차량용." },
+    gx7_5w30:  { name: "발보린 TURBO GX7 5W-30", url: "https://valvoline.co.kr/?project=turbo-gx-7-5w-30",
+                 base: "API SP 100% 합성유. 가솔린·LPG 차량용 대표 제품." },
+    gx7_10w40: { name: "발보린 TURBO GX7 10W-40", url: KR_SITE,
+                 base: "API SP. 고온·고부하 및 연식 있는 가솔린·LPG 차량용." },
+    ldx7_5w30: { name: "발보린 LDX7 5W-30", url: KR_SITE,
+                 base: "디젤(DPF)·가솔린·LPG 겸용 Low SAPS 합성유." },
+    duramax:   { name: "발보린 DURAMAX 5W-30", url: "https://valvoline.co.kr/?project=duramax-5w-30",
+                 base: "PAO 기반 100% 합성유. ACEA C2 규격, DPF 장착 승용디젤·가솔린용." },
+    cng_ml:    { name: "발보린 TURBO CNG MAXLIFE 10W-40", url: "https://valvoline.co.kr/?project=lpg-%EC%97%94%EC%A7%84%EC%98%A4%EC%9D%BC",
+                 base: "LPG/CNG 엔진 전용. 택시 등 장거리 고주행 LPG 차량용." },
+  };
+
   function recommendValvoline(engineKey, oil) {
     const isDiesel = engineKey.includes("디젤");
     const isHybrid = engineKey.includes("하이브리드");
-    const isTurbo = engineKey.includes("터보");
+    const isLpg = engineKey.includes("LPG");
     const needsLowSaps = /ACEA C/.test(oil.spec);   // DPF/GPF 보호용 Low/Mid SAPS
-    const isDexos = /dexos/i.test(oil.spec);
     const visc = oil.visc;
+    const pick = (key, tag, extra) => ({ ...KR_PRODUCTS[key], tag, why: KR_PRODUCTS[key].base + (extra ? " " + extra : "") });
     const list = [];
 
-    if (isHybrid) {
-      list.push({ name: `발보린 하이브리드 풀 신세틱 ${visc}`, tag: "best",
-        why: "하이브리드 엔진 전용 저점도 합성유. 잦은 시동 온·오프 환경에 최적화." });
-      list.push({ name: `발보린 어드밴스드 풀 신세틱 ${visc}`, tag: "alt",
-        why: "API SP · ILSAC GF-6 인증 100% 합성유. 하이브리드에도 사용 가능." });
-    } else if (isDiesel || needsLowSaps) {
-      if (visc === "0W-20") {
-        list.push({ name: "발보린 신파워 ENV C5 0W-20", tag: "best",
-          why: "ACEA C5 Low SAPS 규격. DPF/GPF 장착 차량용 저점도 합성유." });
-        list.push({ name: "발보린 신파워 MST C5 0W-30", tag: "alt",
-          why: "ACEA C5 규격 대체 점도. 가혹조건·고속주행이 많다면 선택." });
-      } else {
-        list.push({ name: "발보린 신파워 MST C5 0W-30", tag: "best",
-          why: "ACEA C5 Low SAPS 규격 100% 합성유. DPF 보호에 적합." });
-        list.push({ name: "발보린 신파워 XL-III C3 5W-30", tag: "alt",
-          why: "ACEA C3 규격. 주행거리가 많은 차량의 대체 점도로 적합." });
-      }
-    } else if (isDexos) {
-      list.push({ name: `발보린 어드밴스드 풀 신세틱 ${visc}`, tag: "best",
-        why: "dexos1 인증 100% 합성유. GM(쉐보레) 차량 권장 규격 충족." });
-      list.push({ name: `발보린 맥스라이프 합성유 ${visc}`, tag: "alt",
-        why: "주행거리 10만km 이상 차량용. 실(seal) 컨디셔너로 오일 누유 예방." });
-    } else if (isTurbo && visc === "0W-30") {
-      list.push({ name: "발보린 신파워 MST C5 0W-30", tag: "best",
-        why: "고온·고부하 터보 엔진을 위한 100% 합성유. API SP 충족." });
-      list.push({ name: "발보린 어드밴스드 풀 신세틱 5W-30", tag: "alt",
-        why: "제조사 대체 점도(5W-30) 사용 시. API SP · ILSAC GF-6 인증." });
+    if (isDiesel || (needsLowSaps && !isHybrid && !isLpg)) {
+      list.push(pick("duramax", "best", "순정 점도가 0W-30인 차량은 취급설명서의 대체 점도(5W-30) 허용 여부를 확인하세요."));
+      list.push(pick("ldx7_5w30", "alt"));
+    } else if (isHybrid) {
+      list.push(pick("gx7_0w20", "best"));
+      if (oil.alt?.some(v => v.includes("W-30"))) list.push(pick("gx7_5w30", "alt", "제조사가 5W-30 대체 점도를 허용하는 경우."));
+    } else if (isLpg) {
+      list.push(pick("gx7_5w30", "best"));
+      list.push(pick("cng_ml", "alt"));
+    } else if (visc === "0W-20") {
+      list.push(pick("gx7_0w20", "best"));
+      list.push(pick("gx7_5w30", "alt", "제조사가 5W-30 대체 점도를 허용하는 경우."));
     } else {
-      list.push({ name: `발보린 어드밴스드 풀 신세틱 ${visc}`, tag: "best",
-        why: "API SP · ILSAC GF-6 인증 100% 합성유. 마모·슬러지 보호 강화." });
-      list.push({ name: `발보린 리스토어 & 프로텍트 ${visc}`, tag: "alt",
-        why: "누적된 카본 침전물 세정 + 신차 수준 보호. 연식 있는 차량에 추천." });
-      list.push({ name: `발보린 맥스라이프 합성유 ${visc}`, tag: "alt",
-        why: "주행거리 10만km 이상 고주행 차량용. 누유 예방 성분 포함." });
+      // 0W-30 / 5W-30 등 가솔린(터보 포함)
+      list.push(pick("gx7_5w30", "best", visc === "0W-30" ? "순정 점도(0W-30) 대신 사용 시 취급설명서의 대체 점도 허용 여부를 확인하세요." : ""));
+      list.push(pick("gx7_10w40", "alt", "여름철·고속주행 위주 또는 주행거리가 많은 차량의 선택지."));
     }
     return list;
   }
@@ -555,11 +559,13 @@
       card.innerHTML =
         `<div class="bottle">🛢️</div>
          <div>
-           <div class="p-name"></div>
+           <div class="p-name"><a target="_blank" rel="noopener"></a></div>
            <div class="p-why"></div>
          </div>
          <span class="p-tag ${p.tag}">${tagText}</span>`;
-      card.querySelector(".p-name").textContent = p.name;
+      const a = card.querySelector(".p-name a");
+      a.textContent = p.name;
+      a.href = p.url;
       card.querySelector(".p-why").textContent = p.why;
       productList.appendChild(card);
     }
