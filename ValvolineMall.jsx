@@ -190,11 +190,11 @@ export default function ValvolineMall() {
       {/* 헤더 */}
       <header style={{ background: '#fff', borderBottom: `1px solid ${BRAND.line}`, position: 'sticky', top: 0, zIndex: 40 }}>
         <div style={{ maxWidth: 1200, margin: '0 auto', padding: '14px 20px', display: 'flex', alignItems: 'center', gap: 20 }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: 10, flexShrink: 0 }}>
-            <div style={{ width: 38, height: 38, borderRadius: 8, background: BRAND.red, color: '#fff', display: 'grid', placeItems: 'center', fontWeight: 900, fontSize: 22, fontStyle: 'italic' }}>V</div>
-            <div>
-              <div style={{ fontWeight: 900, fontSize: 19, letterSpacing: -0.5 }}>발보린 <span style={{ color: BRAND.red }}>사업자몰</span></div>
-              <div style={{ fontSize: 11, color: BRAND.sub, marginTop: 1 }}>VALVOLINE BIZ MALL</div>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 12, flexShrink: 0 }}>
+            <img src="/valvoline-logo.webp" alt="Valvoline" style={{ height: 30, display: 'block' }} />
+            <div style={{ borderLeft: `1px solid ${BRAND.line}`, paddingLeft: 12 }}>
+              <div style={{ fontWeight: 900, fontSize: 18, letterSpacing: -0.5, color: BRAND.red }}>사업자몰</div>
+              <div style={{ fontSize: 10.5, color: BRAND.sub, marginTop: 1 }}>BIZ MALL</div>
             </div>
           </div>
           <div style={{ flex: 1, maxWidth: 460, display: 'flex', border: `2px solid ${BRAND.red}`, borderRadius: 24, overflow: 'hidden' }}>
