@@ -30,11 +30,13 @@ const CATEGORIES = [
 // 실제 취급 품목 기준 카탈로그 (판매물량 상위 제품)
 // ※ 가격은 데모용 임시값 — 실제 공급가 확정 후 교체 필요
 const PRODUCTS = [
-  { id: 1, cat: 'passenger', badge: 'BEST', name: '발보린 T-CX5, 5W30', spec: '1L × 12개 (1박스)', consumer: 156000, biz: 98000, tag: '승용 합성 엔진오일', emoji: '🛢️' },
+  { id: 1, cat: 'passenger', badge: 'BEST', name: '발보린 Turbo CX5, 5W30', spec: '6L × 3개 (1박스)', consumer: 156000, biz: 98000, tag: 'ACEA C2/C3 · 연비개선형', emoji: '🛢️', img: '/products/turbo-cx5-5w30-6l.webp' },
   { id: 2, cat: 'passenger', badge: 'BEST', name: '발보린 T-GX5, 5W30', spec: '1L × 12개 (1박스)', consumer: 144000, biz: 89000, tag: '승용 가솔린', emoji: '🛢️' },
-  { id: 3, cat: 'passenger', badge: null, name: '발보린 T-CX7, 5W30', spec: '1L × 12개 (1박스)', consumer: 168000, biz: 106000, tag: '프리미엄 합성유', emoji: '🛢️' },
+  { id: 3, cat: 'passenger', badge: null, name: '발보린 Turbo CX7, 5W30', spec: '1L × 12개 (1박스)', consumer: 168000, biz: 106000, tag: 'ACEA C2/C3 · 100% 합성유', emoji: '🛢️', img: '/products/turbo-cx7-5w30-1l.webp' },
+  { id: 34, cat: 'passenger', badge: null, name: '발보린 Turbo CX7, 5W30', spec: '6L × 3개 (1박스)', consumer: 186000, biz: 118000, tag: 'ACEA C2/C3, API SQ · 6L', emoji: '🛢️', img: '/products/turbo-cx7-5w30-6l.webp' },
   { id: 4, cat: 'passenger', badge: null, name: '발보린 T-GX7 Hybrid, 0W20', spec: '1L × 12개 (1박스)', consumer: 172000, biz: 112000, tag: '하이브리드 전용', emoji: '🛢️' },
-  { id: 5, cat: 'passenger', badge: null, name: '발보린 T-CX7 Zero, 0W30', spec: '1L × 12개 (1박스)', consumer: 176000, biz: 115000, tag: '저점도 고연비', emoji: '🛢️' },
+  { id: 5, cat: 'passenger', badge: null, name: '발보린 Turbo CX7 Zero, 0W30', spec: '1L × 12개 (1박스)', consumer: 176000, biz: 115000, tag: 'ACEA C2, API SP · 저점도', emoji: '🛢️', img: '/products/turbo-cx7-zero-0w30-1l.webp' },
+  { id: 35, cat: 'passenger', badge: null, name: '발보린 Turbo CX7 Zero, 0W30', spec: '6L × 3개 (1박스)', consumer: 194000, biz: 124000, tag: 'ACEA C2, API SP · 6L', emoji: '🛢️', img: '/products/turbo-cx7-zero-0w30-6l.webp' },
   { id: 6, cat: 'passenger', badge: null, name: '발보린 T-FX, 0W30', spec: '1L × 12개 (1박스)', consumer: 178000, biz: 118000, tag: '고성능 저점도', emoji: '🛢️' },
   { id: 7, cat: 'passenger', badge: 'BEST', name: 'DURAMAX SUPER LDX7, 5W30', spec: '200L 드럼', consumer: 1180000, biz: 720000, tag: '판매 1위 · 드럼', emoji: '🛢️' },
   { id: 8, cat: 'passenger', badge: null, name: 'DURAMAX PRO PX7, 5W30', spec: '4L × 4개 (1박스)', consumer: 148000, biz: 92000, tag: '승용 합성유', emoji: '🛢️' },
